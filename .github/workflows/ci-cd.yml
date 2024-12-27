@@ -42,4 +42,4 @@ jobs:
 
       - name: Run Django Tests
         run: |
-          docker exec -it django-container1 python manage.py test
+          docker exec -i django-container1 python manage.py test
