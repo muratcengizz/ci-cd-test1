@@ -1,0 +1,39 @@
+name: Django CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Lint code
+        run: |
+          flake8 project1 app1
+      
+      - name: Build Docker image
+        run: docker build -t django-container1:latest .
+
+      - name: Test Docker compose
+        run:  docker-compose up -d
+
+      - name: Run Django Tests
+        run: |
+          docker exec -it django-container1 python manage.py test

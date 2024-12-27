@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metadata-name-django-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app-matched
+  template:
+    metadata:
+      labels:
+        app: django-app-matched
+    spec:
+      containers:
+      - name: django-container1
+        image: django-container1:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: POSTGRES_NAME
+          value:  postdatabase_name
+        - name: POSTGRES_USER
+          value:  postdatabase_user
+        - name: POSTGRES_PASSWORD
+          value:  postdatabase_password
+        - name: POSTGRES_HOST
+          value:  postdatabaseservice
+        - name: POSTGRES_PORT
+          value:  "5432"
+      - name: postdatabase-container
+        image: postgres:13
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_NAME
+          value:  postdatabase_name
+        - name: POSTGRES_USER
+          value:  postdatabase_user
+        - name: POSTGRES_PASSWORD
+          value:  postdatabase_password
+        - name: POSTGRES_HOST
+          value:  postdatabaseservice
+        - name: POSTGRES_PORT
+          value:  "5432"
